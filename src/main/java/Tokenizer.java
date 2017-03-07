@@ -12,14 +12,17 @@ public class Tokenizer {
         return instance;
     }
 
+    //the method splits line on tokens: string (it can contain spaces),
+    // pipes ("|") and commands
     public Vector<String> tokenize(String line) {
         String[] words = line.split(" ");
         String token = "";
         boolean flag = false;
         Vector<String> tokens = new Vector<>();
         for (String currWord : words) {
+            int len = currWord.length();
             char firstSymbol = currWord.charAt(0);
-            char lastSymbol = currWord.charAt(currWord.length() - 1);
+            char lastSymbol = currWord.charAt(len - 1);
 
             if ((firstSymbol == '\"') && (lastSymbol != '\"') ||
                     (firstSymbol == '\'') && (lastSymbol != '\'')) {
@@ -31,17 +34,15 @@ public class Tokenizer {
             if ((firstSymbol == '\"') && (lastSymbol == '\"') ||
                     (firstSymbol == '\'') && (lastSymbol == '\'')) {
                 flag = false;
-                tokens.addElement(currWord.substring(1, currWord.length() - 1));
+                tokens.addElement(currWord.substring(1, len - 1));
             }
 
             if (flag && ((lastSymbol == '\"') || (lastSymbol == '\''))) {
-                token += " " + currWord.substring(0, currWord.length() - 1);
+                token += " " + currWord.substring(0, len - 1);
                 tokens.addElement(token);
                 flag = false;
                 continue;
             }
-
-
 
             if (flag) {
                 token += " " + currWord;
@@ -51,7 +52,7 @@ public class Tokenizer {
                 int indexOfPipe = -1;
                 int amountOfPipes = 0;
                 Vector<String> tokensBetweenPipes = new Vector<>();
-                for(int i = 0; i < currWord.length(); i++) {
+                for(int i = 0; i < len; i++) {
                     if(currWord.charAt(i) == '|') {
                         if(i != 0) {
                             tokensBetweenPipes.addElement(currWord.substring(indexOfPipe + 1, i));
@@ -65,8 +66,8 @@ public class Tokenizer {
                 if(indexOfPipe == -1) {
                     tokensBetweenPipes.addElement(currWord);
                 }
-                else if((amountOfPipes != 0) && (indexOfPipe != currWord.length() -1)) {
-                    tokensBetweenPipes.addElement(currWord.substring(indexOfPipe + 1, currWord.length()));
+                else if((amountOfPipes != 0) && (indexOfPipe != len -1)) {
+                    tokensBetweenPipes.addElement(currWord.substring(indexOfPipe + 1, len));
                 }
 
                 for(String cmd : tokensBetweenPipes) {

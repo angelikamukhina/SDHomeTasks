@@ -1,5 +1,6 @@
 import java.util.Vector;
 
+//class singleton for execution of commands chain
 public class Executor {
     private static Executor instance;
     public static Executor getInstance() {
@@ -8,6 +9,8 @@ public class Executor {
         }
         return instance;
     }
+//successively execute commands from tokens. If command is located in head, it's
+//arguments are next two or one (according to command) token from tokens
 
     public void execute(Vector<String> tokens) {
         Executable currCommand = null;
@@ -16,6 +19,7 @@ public class Executor {
         boolean isPrevPipe = false;
         int amountOfArguments = 0;
         for(int i = 0; i < tokens.size(); i++) {
+
             String currToken = tokens.elementAt(i);
 
             if(currToken.equals("|")) {
@@ -23,7 +27,6 @@ public class Executor {
                 continue;
             }
             if(i == 0) {
-
                 if(Executable.possibleCmds.contains(currToken)) {
                     currCommand = new Executable(currToken);
                     if (!currToken.equals("pwd") && !currToken.equals("exit")) {
@@ -43,8 +46,6 @@ public class Executor {
                     }
                     catch(java.lang.Exception e){}
                 }
-
-
             }
             if(isPrevCommand) {
                 if(currCommand.command.equals("=") && amountOfArguments < 1) {
@@ -63,8 +64,6 @@ public class Executor {
                 isPrevCommand = false;
                 isPrevPipe = false;
             }
-
-
         }
     }
 }

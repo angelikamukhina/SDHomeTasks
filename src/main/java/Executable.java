@@ -4,11 +4,18 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Vector;
 
+/*
+this class represents execution on the level of commands
+it could be done easily by inheritance. But now we have only six commands,
+and this functionality in my point of view is also acceptable
+*/
+
 public class Executable {
     public String command;
     private String argument;
 
     public static HashSet<String> possibleCmds;
+
     static {
         possibleCmds = new HashSet();
         possibleCmds.add("cat");
@@ -18,7 +25,8 @@ public class Executable {
         possibleCmds.add("exit");
         possibleCmds.add("=");
     }
-
+//constructor initialising field command. Field argument is initialised dynamically
+// from common stream
     Executable(String command) {
         this.command = command;
     }
@@ -27,7 +35,7 @@ public class Executable {
         this.argument = argument;
     }
 
-
+//executes corresponding command
     void execute(boolean afterPipe) {
 
         switch (command) {

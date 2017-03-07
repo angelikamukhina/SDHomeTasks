@@ -1,3 +1,5 @@
+//class singleton for replacing "$var" to var's value in environment
+// inside double quotes
 public class Preprocessor {
     private static Preprocessor instance;
 
@@ -9,6 +11,7 @@ public class Preprocessor {
         return instance;
     }
 
+    //replaces all $var in line to their values
     public String preprocess(String line) {
         boolean flag = false;
         String internalLine = "";
