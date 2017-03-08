@@ -46,7 +46,7 @@ public class Stream {
         return stream;
     }
 
-    //creates empty stream
+    //creates empty streamTo
     public void clearStream() {
         stream = new Vector<>();
     }

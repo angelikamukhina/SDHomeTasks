@@ -35,6 +35,7 @@ public class Tokenizer {
                     (firstSymbol == '\'') && (lastSymbol == '\'')) {
                 flag = false;
                 tokens.addElement(currWord.substring(1, len - 1));
+                continue;
             }
 
             if (flag && ((lastSymbol == '\"') || (lastSymbol == '\''))) {

@@ -14,16 +14,25 @@ public class Preprocessor {
     //replaces all $var in line to their values
     public String preprocess(String line) {
         boolean flag = false;
+        boolean isPrevSingleQuote = false;
         String internalLine = "";
         String variable = "";
         for(int i = 0; i < line.length(); i++) {
             char currChar = line.charAt(i);
-            if(currChar == '$') {
+            if((currChar == '\'')) {
+                if(isPrevSingleQuote) {
+                    isPrevSingleQuote = false;
+                }
+                else {
+                    isPrevSingleQuote = true;
+                }
+            }
+            if((currChar == '$') && !isPrevSingleQuote) {
                 variable = "";
                 flag = true;
                 continue;
             }
-            if((currChar == ' ') && flag) {
+            if(((currChar == ' ') || (currChar == '\"')) && flag) {
                 String value = valueOfKey(variable);
                 if(value != null) {
                     internalLine += value;
