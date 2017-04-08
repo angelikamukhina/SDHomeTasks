@@ -111,7 +111,7 @@ class Executable {
     }
 
     /**
-     * @param afterPipe if is true wc takes text to analyze from stream
+     * @param afterPipe if is true, wc takes text to analyze from stream
      *                  otherwise it take's it from file (name of file is supposed to be in stream).
      */
     private void execWc(Stream stream, boolean afterPipe) {

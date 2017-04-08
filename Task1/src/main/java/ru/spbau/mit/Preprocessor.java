@@ -1,7 +1,7 @@
 package ru.spbau.mit;
 
 /**
- * class singleton for replacing "$var" to var's value in environment
+ * Class for replacing "$var" to var's value in environment
  * inside double quotes
  */
 

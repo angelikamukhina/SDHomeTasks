@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * The main class of the shell. It reads users commands, calls preprocessor for replacement
+ * The main class of the shell. It reads user's commands,
  * calls preprocessor, tokenizer, executor.
  */
 

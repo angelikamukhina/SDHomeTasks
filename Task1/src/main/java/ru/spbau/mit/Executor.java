@@ -3,13 +3,13 @@ package ru.spbau.mit;
 import java.util.List;
 
 /**
- * Singleton class for execution of commands chain
+ * Class for execution of commands chain
  */
 class Executor {
 
     /**
      * Successively execute commands from tokens. If command is located in head, it's
-     * arguments are next two or one (according to command) token from tokens
+     * arguments are next few (according to command) token from tokens
      *
      * @param tokens input vector of tokens
      */

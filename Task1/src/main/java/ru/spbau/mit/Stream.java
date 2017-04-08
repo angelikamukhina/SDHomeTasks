@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * class singleton for common stream for all commands
+ * Class stream for all commands
  * command takes it's arguments from this stream and
  * sets return value there
  */
@@ -25,7 +25,7 @@ class Stream {
     }
 
     /**
-     * Doesn't overwrite existing stream, only add str as new element
+     * Doesn't overwrite existing stream, just add str as new element
      *
      * @param str element to add
      */
