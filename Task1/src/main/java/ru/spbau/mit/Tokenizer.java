@@ -15,7 +15,7 @@ class Tokenizer {
     List<String> tokenize(String line) {
         String[] words = line.split(" ");
         String token = "";
-        boolean flag = false;
+        boolean isPrevQuote = false;
         Vector<String> tokens = new Vector<>();
         for (String currWord : words) {
             int len = currWord.length();
@@ -24,26 +24,26 @@ class Tokenizer {
 
             if ((firstSymbol == '\"') && (lastSymbol != '\"') ||
                     (firstSymbol == '\'') && (lastSymbol != '\'')) {
-                flag = true;
+                isPrevQuote = true;
                 token = currWord.substring(1);
                 continue;
             }
 
             if ((firstSymbol == '\"') && (lastSymbol == '\"') ||
                     (firstSymbol == '\'') && (lastSymbol == '\'')) {
-                flag = false;
+                isPrevQuote = false;
                 tokens.addElement(currWord.substring(1, len - 1));
                 continue;
             }
 
-            if (flag && ((lastSymbol == '\"') || (lastSymbol == '\''))) {
+            if (isPrevQuote && ((lastSymbol == '\"') || (lastSymbol == '\''))) {
                 token += " " + currWord.substring(0, len - 1);
                 tokens.addElement(token);
-                flag = false;
+                isPrevQuote = false;
                 continue;
             }
 
-            if (flag) {
+            if (isPrevQuote) {
                 token += " " + currWord;
             } else {
                 int indexOfPipe = -1;
@@ -82,7 +82,6 @@ class Tokenizer {
                 }
             }
         }
-
         return tokens;
     }
 
@@ -97,6 +96,5 @@ class Tokenizer {
             }
         }
         return answer;
-
     }
 }

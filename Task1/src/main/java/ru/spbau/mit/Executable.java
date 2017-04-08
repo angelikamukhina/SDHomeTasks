@@ -50,7 +50,6 @@ class Executable {
      * @param afterPipe points out wc command where to take it's argument
      */
     void execute(Environment env, Stream stream, boolean afterPipe) {
-
         switch (command) {
             case "cat": {
                 execCat(stream);
@@ -80,9 +79,7 @@ class Executable {
                 execAssign(env, stream);
                 break;
             }
-
         }
-
     }
 
     private void execCat(Stream stream) {
@@ -143,7 +140,6 @@ class Executable {
             numberOfWords += (argument.split(" ").length);
         }
         stream.setStream(numberOfLines + " " + numberOfWords + " " + numberOfBytes);
-
     }
 
     private void execPwd(Stream stream) {
