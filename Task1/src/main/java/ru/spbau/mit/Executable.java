@@ -1,19 +1,20 @@
+package ru.spbau.mit;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Vector;
 
-/*
-this class represents execution on the level of commands
-it could be done easily by inheritance. But now we have only six commands,
-and this functionality in my point of view is also acceptable
-*/
+import static java.lang.System.exit;
+
+/**
+ * this class represents execution on the level of commands
+ * it could be done easily by inheritance. But now we have only six commands,
+ * and this functionality in my point of view is also acceptable
+ */
 
 public class Executable {
-    public String command;
-    private String argument;
-
     public static HashSet<String> possibleCmds;
 
     static {
@@ -25,8 +26,16 @@ public class Executable {
         possibleCmds.add("exit");
         possibleCmds.add("=");
     }
-//constructor initialising field command. Field argument is initialised dynamically
-// from common stream
+
+    private String command;
+    private String argument;
+
+    /**
+     * constructor initialising field command. Field argument is initialised dynamically
+     * from common stream
+     *
+     * @param command name of command from list above
+     */
     Executable(String command) {
         this.command = command;
     }
@@ -35,37 +44,40 @@ public class Executable {
         this.argument = argument;
     }
 
-//executes corresponding command
-    void execute(boolean afterPipe) {
+    /**
+     * executes corresponding command
+     *
+     * @param afterPipe points out wc command where to take it's argument
+     */
+    void execute(Environment env, Stream stream, boolean afterPipe) {
 
         switch (command) {
-            case "cat" : {
-                execCat();
+            case "cat": {
+                execCat(stream);
                 break;
             }
 
-            case "echo" :
-                execEcho();
+            case "echo":
+                execEcho(stream);
                 break;
 
-            case "wc" : {
-                execWc(afterPipe);
-                break;
-            }
-
-            case "pwd" : {
-                execPwd();
+            case "wc": {
+                execWc(stream, afterPipe);
                 break;
             }
 
-            case "exit" : {
-                Stream stream = Stream.getInstance();
-                stream.setStream("EXIT!!!");
+            case "pwd": {
+                execPwd(stream);
                 break;
             }
 
-            case "=" : {
-                execAssign();
+            case "exit": {
+                exit(0);
+                break;
+            }
+
+            case "=": {
+                execAssign(env, stream);
                 break;
             }
 
@@ -73,10 +85,9 @@ public class Executable {
 
     }
 
-    private void execCat() {
-        Stream stream = Stream.getInstance();
+    private void execCat(Stream stream) {
         Scanner fileContents;
-        setArgument(stream.getStream().lastElement());
+        setArgument(stream.getStream().get(stream.size()-1));
         stream.clearStream();
         try {
             fileContents = new Scanner(new File(argument));
@@ -91,20 +102,25 @@ public class Executable {
         }
     }
 
-    private void execEcho() {
-        Stream stream = Stream.getInstance();
-        setArgument(stream.getStream().elementAt(0));
-        stream.setStream(argument);
+    private void execEcho(Stream stream) {
+        argument = "";
+        for (String word : stream.getStream()) {
+            argument += word + " ";
+        }
+        stream.setStream(argument.trim());
     }
 
-    private void execWc(boolean afterPipe) {
-        Stream stream = Stream.getInstance();
-        setArgument(stream.getStream().firstElement());
+    /**
+     * @param afterPipe if is true wc takes text to analyze from stream
+     *                  otherwise it take's it from file (name of file is supposed to be in stream).
+     */
+    private void execWc(Stream stream, boolean afterPipe) {
+        setArgument(stream.getStream().get(0));
         stream.clearStream();
         int numberOfLines = 0;
         int numberOfWords = 0;
         int numberOfBytes = 0;
-        if(!afterPipe) {
+        if (!afterPipe) {
             Scanner fileContents;
 
             try {
@@ -114,37 +130,29 @@ public class Executable {
                 return;
             }
 
-            String line;
-            String[] words;
             while (fileContents.hasNextLine()) {
-                line = fileContents.nextLine();
+                String line = fileContents.nextLine();
                 numberOfBytes += (line.getBytes()).length;
                 numberOfWords += (line.split(" ").length);
                 numberOfLines++;
             }
 
-
-        }
-        else {
+        } else {
             numberOfLines += (argument.split("\n")).length;
             numberOfBytes += (argument.getBytes()).length;
             numberOfWords += (argument.split(" ").length);
-
         }
         stream.setStream(numberOfLines + " " + numberOfWords + " " + numberOfBytes);
 
     }
 
-    private void execPwd() {
-        Stream stream = Stream.getInstance();
+    private void execPwd(Stream stream) {
         stream.setStream(new File("").getAbsolutePath());
     }
 
-    private void execAssign() {
-        Stream stream = Stream.getInstance();
-        Environment env = Environment.getInstance();
-        Vector<String> params = stream.getStream();
-        env.setNewVariable(params.elementAt(0), params.elementAt(1));
+    private void execAssign(Environment env, Stream stream) {
+        List<String> params = stream.getStream();
+        env.setNewVariable(params.get(0), params.get(1));
         stream.clearStream();
     }
 }

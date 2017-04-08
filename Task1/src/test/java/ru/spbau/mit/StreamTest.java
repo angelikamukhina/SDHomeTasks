@@ -1,11 +1,14 @@
+package ru.spbau.mit;
+
 import org.junit.Test;
+import ru.spbau.mit.Stream;
 
 import static org.junit.Assert.*;
 
 public class StreamTest {
     @Test
     public void size() throws Exception {
-        Stream stream = Stream.getInstance();
+        Stream stream = new Stream();
         stream.addToStream("Hello ");
         stream.addToStream("World!");
         assertEquals(2, stream.size());
@@ -14,7 +17,7 @@ public class StreamTest {
 
     @Test
     public void setStream() throws Exception {
-        Stream stream = Stream.getInstance();
+        Stream stream = new Stream();
         stream.addToStream("Hello");
         stream.addToStream("World");
         stream.setStream("Hello");
@@ -23,25 +26,25 @@ public class StreamTest {
 
     @Test
     public void addToStream() throws Exception {
-        Stream stream = Stream.getInstance();
+        Stream stream = new Stream();
         stream.clearStream();
         stream.addToStream("Hello");
-        assertEquals("Hello", stream.getStream().firstElement());
+        assertEquals("Hello", stream.getStream().get(0));
     }
 
     @Test
     public void addToStreamElement() throws Exception {
-        Stream stream = Stream.getInstance();
+        Stream stream = new Stream();
         stream.clearStream();
         stream.addToStream("Hello");
         stream.addToStreamElement(0, " World");
-        assertEquals("Hello World", stream.getStream().elementAt(0));
+        assertEquals("Hello World", stream.getStream().get(0));
     }
 
 
     @Test
     public void clearStream() throws Exception {
-        Stream stream = Stream.getInstance();
+        Stream stream = new Stream();
         stream.addToStream("Hello");
         stream.clearStream();
         assertEquals(0, stream.size());

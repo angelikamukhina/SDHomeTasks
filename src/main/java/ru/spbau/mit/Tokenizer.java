@@ -1,20 +1,16 @@
+import java.util.List;
 import java.util.Vector;
 
 public class Tokenizer {
 
-    private static Tokenizer instance;
-
-
-    public static Tokenizer getInstance() {
-        if(instance == null) {
-            instance = new Tokenizer();
-        }
-        return instance;
-    }
-
-    //the method splits line on tokens: string (it can contain spaces),
-    // pipes ("|") and commands
-    public Vector<String> tokenize(String line) {
+    /**
+     * The method splits line into tokens: string (it can contain spaces),
+     * pipes ("|") and commands
+     *
+     * @param line preprocessed line
+     * @return tokens
+     */
+    public List<String> tokenize(String line) {
         String[] words = line.split(" ");
         String token = "";
         boolean flag = false;
@@ -48,14 +44,13 @@ public class Tokenizer {
             if (flag) {
                 token += " " + currWord;
                 continue;
-            }
-            else {
+            } else {
                 int indexOfPipe = -1;
                 int amountOfPipes = 0;
                 Vector<String> tokensBetweenPipes = new Vector<>();
-                for(int i = 0; i < len; i++) {
-                    if(currWord.charAt(i) == '|') {
-                        if(i != 0) {
+                for (int i = 0; i < len; i++) {
+                    if (currWord.charAt(i) == '|') {
+                        if (i != 0) {
                             tokensBetweenPipes.addElement(currWord.substring(indexOfPipe + 1, i));
                         }
                         tokensBetweenPipes.addElement("|");
@@ -64,24 +59,22 @@ public class Tokenizer {
                     }
                 }
 
-                if(indexOfPipe == -1) {
+                if (indexOfPipe == -1) {
                     tokensBetweenPipes.addElement(currWord);
-                }
-                else if((amountOfPipes != 0) && (indexOfPipe != len -1)) {
+                } else if ((amountOfPipes != 0) && (indexOfPipe != len - 1)) {
                     tokensBetweenPipes.addElement(currWord.substring(indexOfPipe + 1, len));
                 }
 
-                for(String cmd : tokensBetweenPipes) {
-                    if(cmd.equals("|")) {
+                for (String cmd : tokensBetweenPipes) {
+                    if (cmd.equals("|")) {
                         tokens.addElement(cmd);
                         continue;
                     }
                     Vector<String> argsOfAssignment = parseAssignment(cmd);
 
-                    if(argsOfAssignment == null) {
+                    if (argsOfAssignment == null) {
                         tokens.addElement(cmd);
-                    }
-                    else {
+                    } else {
                         tokens.addElement("=");
                         tokens.addAll(argsOfAssignment);
                     }
@@ -94,15 +87,15 @@ public class Tokenizer {
 
     private Vector<String> parseAssignment(String command) {
         Vector<String> answer = null;
-        for(int i = 0; i < command.length(); i++) {
+        for (int i = 0; i < command.length(); i++) {
             char currChar = command.charAt(i);
-            if(currChar == '=') {
+            if (currChar == '=') {
                 answer = new Vector<>();
                 answer.addElement(command.substring(0, i));
-                answer.addElement(command.substring(i+1, command.length()));
+                answer.addElement(command.substring(i + 1, command.length()));
             }
         }
         return answer;
 
     }
- }
+}
