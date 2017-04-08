@@ -25,7 +25,5 @@ public class ExecutorTest {
         ex.execute(toks, env, stream);
 
         assertEquals("1 1 3", stream.getStream().get(0));
-
     }
-
 }

@@ -11,7 +11,6 @@ public class StreamTest {
         stream.addToStream("Hello ");
         stream.addToStream("World!");
         assertEquals(2, stream.size());
-
     }
 
     @Test
@@ -48,5 +47,4 @@ public class StreamTest {
         stream.clearStream();
         assertEquals(0, stream.size());
     }
-
 }

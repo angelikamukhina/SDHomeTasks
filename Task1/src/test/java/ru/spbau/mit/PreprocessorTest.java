@@ -16,5 +16,4 @@ public class PreprocessorTest {
         answer = pr.preprocess("echo $g", env);
         assertEquals("echo 9", answer);
     }
-
 }

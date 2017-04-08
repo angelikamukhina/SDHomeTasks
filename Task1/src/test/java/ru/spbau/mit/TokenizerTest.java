@@ -25,5 +25,4 @@ public class TokenizerTest {
         assertEquals("cat", tokens.get(0));
         assertEquals("wc", tokens.get(tokens.size() - 1));
     }
-
 }
