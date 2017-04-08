@@ -1,11 +1,10 @@
 package ru.spbau.mit;
 
 import org.junit.Test;
-import ru.spbau.mit.Stream;
 
 import java.util.Vector;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ExecutorTest {
     @Test
@@ -23,7 +22,7 @@ public class ExecutorTest {
 
         toks.addElement("|");
         toks.addElement("wc");
-        ex.execute(toks,env, stream);
+        ex.execute(toks, env, stream);
 
         assertEquals("1 1 3", stream.getStream().get(0));
 

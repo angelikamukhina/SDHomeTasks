@@ -1,8 +1,9 @@
 package ru.spbau.mit;
+
 import java.util.List;
 import java.util.Vector;
 
-public class Tokenizer {
+class Tokenizer {
 
     /**
      * The method splits line into tokens: string (it can contain spaces),
@@ -11,7 +12,7 @@ public class Tokenizer {
      * @param line preprocessed line
      * @return tokens
      */
-    public List<String> tokenize(String line) {
+    List<String> tokenize(String line) {
         String[] words = line.split(" ");
         String token = "";
         boolean flag = false;
@@ -44,7 +45,6 @@ public class Tokenizer {
 
             if (flag) {
                 token += " " + currWord;
-                continue;
             } else {
                 int indexOfPipe = -1;
                 int amountOfPipes = 0;

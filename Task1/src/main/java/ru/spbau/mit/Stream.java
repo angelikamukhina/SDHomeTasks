@@ -10,7 +10,7 @@ import java.util.Vector;
  */
 
 
-public class Stream {
+class Stream {
     /**
      * use of Vector object helps support more than one argument for commands.
      * for example, command "=" takes two arguments (variable and it's value)
@@ -20,7 +20,7 @@ public class Stream {
     /**
      * @return size of stream
      */
-    public int size() {
+    int size() {
         return stream.size();
     }
 
@@ -29,7 +29,7 @@ public class Stream {
      *
      * @param str element to add
      */
-    public void addToStream(String str) {
+    void addToStream(String str) {
         stream.addElement(str);
     }
 
@@ -39,7 +39,7 @@ public class Stream {
      * @param index index of stream vector
      * @param str   string to concatenate with
      */
-    public void addToStreamElement(int index, String str) {
+    void addToStreamElement(int index, String str) {
         stream.insertElementAt(stream.get(index) + str, index);
         stream.remove(stream.size() - 1);
     }
@@ -47,7 +47,7 @@ public class Stream {
     /**
      * @return Vector<String> stream
      */
-    public List<String> getStream() {
+    List<String> getStream() {
         return stream;
     }
 
@@ -56,7 +56,7 @@ public class Stream {
      *
      * @param arg new string
      */
-    public void setStream(String arg) {
+    void setStream(String arg) {
         stream = new Vector<>();
         stream.add(arg);
     }
@@ -64,7 +64,7 @@ public class Stream {
     /**
      * clears stream
      */
-    public void clearStream() {
+    void clearStream() {
         stream = new Vector<>();
     }
 }

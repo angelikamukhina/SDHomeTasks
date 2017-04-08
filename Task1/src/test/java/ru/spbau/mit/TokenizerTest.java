@@ -1,9 +1,11 @@
 package ru.spbau.mit;
 
 import org.junit.Test;
+
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class TokenizerTest {
@@ -21,7 +23,7 @@ public class TokenizerTest {
         tokens = tokenizer.tokenize("cat file | wc");
         assertEquals(4, tokens.size());
         assertEquals("cat", tokens.get(0));
-        assertEquals("wc", tokens.get(tokens.size()-1));
+        assertEquals("wc", tokens.get(tokens.size() - 1));
     }
 
 }

@@ -6,7 +6,7 @@ import java.util.HashMap;
  * this class is wrapper for map which supports environment variables
  */
 
-public class Environment {
+class Environment {
 
     /**
      * we save the instance of Environment class for future uses

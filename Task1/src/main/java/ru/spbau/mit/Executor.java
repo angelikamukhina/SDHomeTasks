@@ -5,8 +5,7 @@ import java.util.List;
 /**
  * Singleton class for execution of commands chain
  */
-
-public class Executor {
+class Executor {
 
     /**
      * Successively execute commands from tokens. If command is located in head, it's
@@ -15,7 +14,7 @@ public class Executor {
      * @param tokens input vector of tokens
      */
 
-    public void execute(List<String> tokens, Environment env, Stream stream) {
+    void execute(List<String> tokens, Environment env, Stream stream) {
         Executable currCommand;
         boolean isPrevPipe = false;
         int j = 0;
@@ -44,7 +43,7 @@ public class Executor {
                 Process prc = null;
                 String cmd[] = {currToken};
                 try {
-                    prc = runtime.exec(cmd);
+                    runtime.exec(cmd);
                 } catch (java.lang.Exception e) {
                     e.printStackTrace();
                 }

@@ -1,0 +1,3 @@
+Hello, World!
+This is just test file 
+for command "cat" and wc.

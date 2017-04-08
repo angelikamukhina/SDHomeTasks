@@ -14,11 +14,11 @@ import static java.lang.System.exit;
  * and this functionality in my point of view is also acceptable
  */
 
-public class Executable {
-    public static HashSet<String> possibleCmds;
+class Executable {
+    static HashSet<String> possibleCmds;
 
     static {
-        possibleCmds = new HashSet();
+        possibleCmds = new HashSet<>();
         possibleCmds.add("cat");
         possibleCmds.add("echo");
         possibleCmds.add("wc");
@@ -40,7 +40,7 @@ public class Executable {
         this.command = command;
     }
 
-    void setArgument(String argument) {
+    private void setArgument(String argument) {
         this.argument = argument;
     }
 
@@ -87,7 +87,7 @@ public class Executable {
 
     private void execCat(Stream stream) {
         Scanner fileContents;
-        setArgument(stream.getStream().get(stream.size()-1));
+        setArgument(stream.getStream().get(stream.size() - 1));
         stream.clearStream();
         try {
             fileContents = new Scanner(new File(argument));
