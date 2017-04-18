@@ -7,7 +7,6 @@ import java.util.HashMap;
  */
 
 class Environment {
-
     /**
      * we save the instance of Environment class for future uses
      */
