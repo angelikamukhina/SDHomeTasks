@@ -1,10 +1,12 @@
 package ru.spbau.mit;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.System.exit;
 
@@ -42,7 +44,7 @@ class Executable {
         this.command = command;
     }
 
-    private void setArgument(String argument) {
+    public void setArgument(String argument) {
         this.argument = argument;
     }
 
@@ -129,7 +131,10 @@ class Executable {
      *                  otherwise it takes it from file (name of file is supposed to be in stream).
      */
     private void execWc(Stream stream, boolean afterPipe) {
-        setArgument(stream.getStream().get(0));
+        setArgument(stream.getStream()
+                          .stream()
+                          .collect(Collectors.joining("\n"))
+        );
         stream.clearStream();
         int numberOfLines = 0;
         int numberOfWords = 0;
@@ -176,19 +181,24 @@ class Executable {
      *               directory that we want to print.
      */
     private void execLs(@NotNull Stream stream) {
-        String path;
-
-        if (stream.size() == 0) {
-            setArgument(null);
-        } else {
+        if (argument == null && stream.size() != 0) {
             setArgument(stream.getStream().get(stream.size() - 1));
         }
+        stream.clearStream();
 
-        path = argument != null ? argument : System.getProperty("user.dir");
+        String path = argument != null ? argument : System.getProperty("user.dir");
+
         File directory = new File(path);
-
         if (!directory.exists()) {
-            System.out.println("There is no such directory: " + directory);
+            System.out.println("No such directory: " + path);
+            return;
+        }
+
+        try {
+            path = directory.getCanonicalPath();
+            directory = new File(path);
+        } catch (IOException e) {
+            System.out.println("Bad path: " + path);
             return;
         }
 
@@ -211,13 +221,24 @@ class Executable {
      *               if stream is empty nothing is changed
      */
     private void execCd(@NotNull Stream stream) {
-        if (stream.size() == 0) {
+        if (argument == null && stream.size() != 0) {
+            setArgument(stream.getStream().get(stream.size() - 1));
+        }
+        stream.clearStream();
+
+        String newDirectory = argument;
+        File newDirObj = new File(newDirectory);
+
+        try {
+            newDirectory = newDirObj.getCanonicalPath();
+            newDirObj = new File(newDirectory);
+        } catch (IOException e) {
+            System.out.println("Bad path: " + newDirectory);
             return;
         }
-        String newDirectory = stream.getStream().get(stream.size() - 1);
 
-        if (! new File(newDirectory).exists()) {
-            System.out.println("There is no such directory: " + newDirectory);
+        if (!newDirObj.exists()) {
+            System.out.println("No such directory: " + newDirectory);
             return;
         }
 
