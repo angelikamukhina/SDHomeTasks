@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 public class Shell {
     public static void main(String[] args) {
-
         Environment environment = new Environment();
         Preprocessor preprocessor = new Preprocessor();
         Tokenizer tokenizer = new Tokenizer();
@@ -18,9 +17,11 @@ public class Shell {
         Stream stream = new Stream();
 
         while (true) {
-            String line;
             Scanner in = new Scanner(System.in);
-            line = in.nextLine();
+            String line = in.nextLine();
+            if (line.equals("exit")) {
+                break;
+            }
 
             line = preprocessor.preprocess(line.trim(), environment);
 
@@ -32,7 +33,9 @@ public class Shell {
                 continue;
             }
 
-            System.out.println(stream.getStream().get(0));
+            for (String chunk : stream.getStream()) {
+                System.out.println(chunk);
+            }
             stream.clearStream();
         }
     }
