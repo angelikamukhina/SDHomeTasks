@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 public class ExecutableTest {
 
     @Test
-    public void executeEcho() throws Exception {
+    public void executeEchoWithOneArgumentTest() throws Exception {
         Stream stream = new Stream();
         Environment env = new Environment();
         Executable exec = new Executable("echo");
@@ -17,7 +17,7 @@ public class ExecutableTest {
     }
 
     @Test
-    public void executeWc() throws Exception {
+    public void executeWcOnStringFromConsoleTest() throws Exception {
         Stream stream = new Stream();
         Environment env = new Environment();
         Executable exec = new Executable("wc");

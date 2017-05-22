@@ -1,8 +1,13 @@
 package ru.spbau.mit;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * Object of this class convert input preprocessed
+ * line to list of tokens - commands and their arguments.
+ */
 class Tokenizer {
 
     /**
@@ -12,7 +17,8 @@ class Tokenizer {
      * @param line preprocessed line
      * @return tokens
      */
-    List<String> tokenize(String line) {
+    public List<String> tokenize(String line) {
+        if (line.isEmpty()) return Collections.emptyList();
         String[] words = line.split(" ");
         String token = "";
         boolean isPrevQuote = false;

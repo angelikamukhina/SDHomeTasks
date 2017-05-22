@@ -5,7 +5,6 @@ import java.util.HashMap;
 /**
  * this class is wrapper for map which supports environment variables
  */
-
 class Environment {
 
     /**
@@ -19,7 +18,7 @@ class Environment {
      * @param key   name of new environment variable
      * @param value value of the variable
      */
-    void setNewVariable(String key, String value) {
+    public void setNewVariable(String key, String value) {
         variables.put(key, value);
     }
 
@@ -29,7 +28,7 @@ class Environment {
      * @param var name of necessary variable
      * @return value of the variable
      */
-    String getVariable(String var) {
+    public String getVariable(String var) {
         return variables.get(var);
     }
 }

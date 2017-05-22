@@ -13,9 +13,7 @@ class Executor {
      *
      * @param tokens input vector of tokens
      */
-
-    void execute(List<String> tokens, Environment env, Stream stream) {
-        Executable currCommand;
+    public void execute(List<String> tokens, Environment env, Stream stream) {
         boolean isPrevPipe = false;
         int j = 0;
         while (j != tokens.size()) {
@@ -28,8 +26,8 @@ class Executor {
                 continue;
             }
 
-            if (Executable.possibleCmds.contains(currToken)) {
-                currCommand = new Executable(currToken);
+            if (Executable.isAvailableCommand(currToken)) {
+                Executable currCommand = new Executable(currToken);
 
                 j++; // shift to arguments
 
@@ -40,7 +38,6 @@ class Executor {
                 currCommand.execute(env, stream, isPrevPipe);
             } else {
                 Runtime runtime = Runtime.getRuntime();
-                Process prc = null;
                 String cmd[] = {currToken};
                 try {
                     runtime.exec(cmd);

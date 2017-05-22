@@ -13,9 +13,8 @@ import static java.lang.System.exit;
  * it could be done easily by inheritance. But now we have only six commands,
  * and this functionality in my point of view is also acceptable
  */
-
 class Executable {
-    static HashSet<String> possibleCmds;
+    private static HashSet<String> possibleCmds;
 
     static {
         possibleCmds = new HashSet<>();
@@ -40,6 +39,16 @@ class Executable {
         this.command = command;
     }
 
+    /**
+     * checks if the cmd string correspond to any of available commands
+     *
+     * @param cmd string to check
+     * @return true if it's available command and false if not
+     */
+    public static boolean isAvailableCommand(String cmd) {
+        return possibleCmds.contains(cmd);
+    }
+
     private void setArgument(String argument) {
         this.argument = argument;
     }
@@ -49,7 +58,7 @@ class Executable {
      *
      * @param afterPipe points out wc command where to take it's argument
      */
-    void execute(Environment env, Stream stream, boolean afterPipe) {
+    public void execute(Environment env, Stream stream, boolean afterPipe) {
         switch (command) {
             case "cat": {
                 execCat(stream);
@@ -108,6 +117,8 @@ class Executable {
     }
 
     /**
+     * handler for wc-command it cat read arguments from stream and from file.
+     *
      * @param afterPipe if is true, wc takes text to analyze from stream
      *                  otherwise it take's it from file (name of file is supposed to be in stream).
      */
@@ -152,3 +163,4 @@ class Executable {
         stream.clearStream();
     }
 }
+

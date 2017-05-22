@@ -4,7 +4,6 @@ package ru.spbau.mit;
  * Class for replacing "$var" to var's value in environment
  * inside double quotes
  */
-
 class Preprocessor {
 
     /**
@@ -13,7 +12,7 @@ class Preprocessor {
      * @param line user's line with '$'
      * @return string without '$', but with corresponding values
      */
-    String preprocess(String line, Environment env) {
+    public String preprocess(String line, Environment env) {
         boolean isPrev$ = false;
         boolean isPrevSingleQuote = false;
         String internalLine = "";

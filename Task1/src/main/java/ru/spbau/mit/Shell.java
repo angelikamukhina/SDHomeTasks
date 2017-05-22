@@ -7,7 +7,6 @@ import java.util.Scanner;
  * The main class of the shell. It reads user's commands,
  * calls preprocessor, tokenizer, executor.
  */
-
 public class Shell {
     public static void main(String[] args) {
 
@@ -18,9 +17,8 @@ public class Shell {
         Stream stream = new Stream();
 
         while (true) {
-            String line;
             Scanner in = new Scanner(System.in);
-            line = in.nextLine();
+            String line = in.nextLine();
 
             line = preprocessor.preprocess(line.trim(), environment);
 
