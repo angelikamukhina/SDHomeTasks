@@ -1,3 +1,8 @@
+package ru.spbau.mit;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,41 +18,53 @@ public class Game {
     private static final int NUMBER_OF_ROOMS = 5;
     private static final int AMOUNT_OF_ITEMS_IN_ROOM = 6;
     private static final int AMOUNT_OF_ENEMIES_IN_ROOM = 4;
+
     /**
      * In the main method UI and Map objects, list of map cells and
      * cell corresponding to main character  are created.
      * At the start of game items and enemies are generated randomly in room
      * where the main character is.
      * When the mole come to new room, new enemies and items are created.
+     *
      * @param args
      */
     public static void main(String[] args) {
         UI ui = new UI(MAP_HEIGHT);
+        Logger LOG = LogManager.getLogger(Game.class);
+        LOG.info("UI object was created");
         Map map = new Map(MAP_WIDTH, MAP_HEIGHT, NUMBER_OF_ROOMS);
+        LOG.info("Map object was created");
         List<Cell> cells = initGame(map);
+        LOG.info("Map cells were created and initialized");
         Cell moleCell = getMole(cells, map, ui);
+        LOG.info("Mole object was created");
         ui.displayRules();
-
         Map.Room theFirstRoom = map.rooms.get(0);
         generateItems(AMOUNT_OF_ITEMS_IN_ROOM, cells, theFirstRoom);
         generateEnemies(AMOUNT_OF_ENEMIES_IN_ROOM, cells, theFirstRoom, moleCell);
 
+        LOG.info("All initial game objects were created");
 
         Set<Map.Room> visitedRooms = new HashSet<>();
         List<Cell> characterCells = new ArrayList<>();
-        ui.displayMoleState((Mole)(moleCell.getCharacter()));
+        ui.displayMoleState((Mole) (moleCell.getCharacter()));
 
+        LOG.info("Game started");
         do {
             ui.displayMap(cells);
             getCharactersCells(cells, characterCells);
-            turn(ui, cells, moleCell, moleCell);
+            turn(LOG, ui, cells, moleCell, moleCell);
+
+            LOG.info("Mole has made turn");
+
             ui.displayMap(cells);
 
             for (Cell cellElement : characterCells) {
-                turn(ui, cells, cellElement, moleCell);
+                turn(LOG, ui, cells, cellElement, moleCell);
+                LOG.info(cellElement.getCharacter().getName() + " has made turn");
                 ui.displayMap(cells);
             }
-            ui.displayMoleState((Mole)moleCell.getCharacter());
+            ui.displayMoleState((Mole) moleCell.getCharacter());
             genItems(moleCell, map.rooms, visitedRooms, cells);
             genEnemiesIfNewRoom(moleCell, map.rooms, visitedRooms, cells);
         } while (characterCells.size() > 0 &&
@@ -83,66 +100,87 @@ public class Game {
 
     /**
      * Turn of the game. All players step by 1 cell up, down, left or right.
-     * @param ui object of class implementing ConsoleInterface
-     * @param cells map cells
+     *
+     * @param ui          object of class implementing ConsoleInterface
+     * @param cells       map cells
      * @param currentCell cell that goes
      */
-    private static void turn(UI ui, List<Cell> cells, Cell currentCell, Cell moleCell) {
+    private static void turn(Logger LOG, UI ui, List<Cell> cells, Cell currentCell, Cell moleCell) {
+        Character currCharacter = currentCell.getCharacter();
+
         Location xy;
         int numberOfAttempts = 0;
         do {
+            Character.Movement cm = null;
             if (!currentCell.getCharacter().isBot()) {
-                Character.Movement cm = ui.getUserActions((Mole)moleCell.getCharacter());
-                xy = currentCell.attemptManualMove(cm);
-            } else {
-                xy = currentCell.attemptMove();
+                cm = ui.getUserActions((Mole) moleCell.getCharacter(), cells);
             }
+            xy = currCharacter.attemptMove(currentCell.getLocation(), cm);
             numberOfAttempts++;
         } while (isWall(xy, cells) && numberOfAttempts <= 20);
         if (numberOfAttempts == 20) return;
 
         int newLocationInList = Location.locationToList(xy.x, xy.y, MAP_WIDTH);
-        int oldLocationInList = Location.locationToList(currentCell.getX(), currentCell.getY(), MAP_WIDTH);
-        Character currCharacter = currentCell.getCharacter();
+        Location prevLocation = currentCell.getLocation();
+        int oldLocationInList = Location.locationToList(prevLocation.x, prevLocation.y, MAP_WIDTH);
         Cell cellOnNewLocation = cells.get(newLocationInList);
+
         if (cellOnNewLocation.isCharacter()) {
-            Character characterOnNewLocation = cellOnNewLocation.getCharacter();
-            if (characterOnNewLocation == currCharacter) {
-                return;
-            }
-
-            if (characterOnNewLocation.getIsAlive()) {
-                while (currCharacter.getIsAlive() && characterOnNewLocation.getIsAlive()) {
-                    currCharacter.attack(characterOnNewLocation);
-                    characterOnNewLocation.attack(currCharacter);
-                }
-                if (!currCharacter.getIsAlive()) {
-                    ui.displayDeadCharacter(currentCell.getLocation(), currCharacter);
-                } else {
-                    ui.displayDeadCharacter(xy, characterOnNewLocation);
-                }
-            }
+            meetCharacter(LOG, ui, currentCell, xy, cellOnNewLocation);
         } else {
+
             if (cellOnNewLocation.isItem() && !currCharacter.isBot()) {
-                Cell.Item item = cellOnNewLocation.item;
-                ((Mole) currCharacter).putItemToBackpack(item);
-                switch (item) {
-                    case HELMET:
-                        System.out.println("Mole put helmet to backpack");
-                        break;
-                    case STONE:
-                        System.out.println("Mole put stone to backpack");
-                        break;
-                    case WARM:
-                        System.out.println("Mole put warm to backpack");
-                        break;
-                }
+                meetItem(LOG, (Mole) currCharacter, cellOnNewLocation);
             }
 
-            cells.set(oldLocationInList, new Cell(new Location(currentCell.getLocation()), Cell.Kind.EMPTY));
-            currentCell.setX(xy.x);
-            currentCell.setY(xy.y);
-            cells.set(newLocationInList, currentCell);
+            meetEmptyCell(cells, currentCell, xy, newLocationInList, oldLocationInList);
+        }
+    }
+
+    private static void meetEmptyCell(List<Cell> cells, Cell currentCell,
+                                      Location xy, int newLocationInList, int oldLocationInList) {
+        Location prevLocation = new Location(currentCell.getLocation());
+        cells.set(oldLocationInList, new Cell(prevLocation, Cell.Kind.EMPTY));
+        currentCell.getLocation().x = xy.x;
+        currentCell.getLocation().y = xy.y;
+        cells.set(newLocationInList, currentCell);
+    }
+
+    private static void meetItem(Logger LOG, Mole mole, Cell cellOnNewLocation) {
+        Cell.Item item = cellOnNewLocation.getItem();
+        mole.putItemToBackpack(item);
+        switch (item) {
+            case HELMET:
+                LOG.info("Mole put helmet to backpack");
+                break;
+            case STONE:
+                LOG.info("Mole put stone to backpack");
+                break;
+            case WARM:
+                LOG.info("Mole put warm to backpack");
+                break;
+        }
+    }
+
+    private static void meetCharacter(Logger LOG, UI ui, Cell currentCell, Location xy, Cell cellOnNewLocation) {
+        Character currCharacter = currentCell.getCharacter();
+        Character characterOnNewLocation = cellOnNewLocation.getCharacter();
+        if (characterOnNewLocation == currCharacter) {
+            return;
+        }
+
+        if (characterOnNewLocation.getIsAlive()) {
+            while (currCharacter.getIsAlive() && characterOnNewLocation.getIsAlive()) {
+                currCharacter.attack(characterOnNewLocation);
+                characterOnNewLocation.attack(currCharacter);
+            }
+            if (!currCharacter.getIsAlive()) {
+                ui.displayDeadCharacter(currentCell.getLocation(), currCharacter);
+                LOG.info(currCharacter.getName() + " is dead");
+            } else {
+                ui.displayDeadCharacter(xy, characterOnNewLocation);
+                LOG.info(characterOnNewLocation + " is dead");
+            }
         }
     }
 
@@ -172,7 +210,7 @@ public class Game {
         Set<Location> occupiedLocations = new HashSet<>();
         for (Cell cell : cells) {
             if (!cell.isEmpty()) {
-                occupiedLocations.add(new Location(cell.getX(), cell.getY()));
+                occupiedLocations.add(new Location(cell.getLocation()));
             }
         }
         for (int enemies = 0; enemies < amountOfItems / 3; enemies++) {
@@ -236,7 +274,7 @@ public class Game {
         if (display.equals("S")) {
             newEnemy = new Shovel("Shovel" + enemies, 100, true, display);
         } else {
-            newEnemy = new Dog("Dog" + enemies, 100, true, display, moleCell, currLocation);
+            newEnemy = new Dog("Dog" + enemies, true, display, moleCell, currLocation);
         }
         cells.set(Location.locationToList(x, y, MAP_WIDTH),
                 new Cell(currLocation, Cell.Kind.CHARACTER, newEnemy));
@@ -245,7 +283,7 @@ public class Game {
     private static Cell getMole(List<Cell> cells, Map map, UI ui) {
         Map.Room theFirstRoom = map.rooms.get(0);
         Location moleLocation = new Location(theFirstRoom.x, theFirstRoom.y);
-        Cell moleCell = new Cell(moleLocation, Cell.Kind.CHARACTER, new Mole(ui.getMoleName(), 100, false));
+        Cell moleCell = new Cell(moleLocation, Cell.Kind.CHARACTER, new Mole(ui.getMoleName()));
         cells.set(Location.locationToList(theFirstRoom.x, theFirstRoom.y, MAP_WIDTH), moleCell);
         return moleCell;
     }

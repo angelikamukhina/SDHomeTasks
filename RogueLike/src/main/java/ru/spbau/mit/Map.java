@@ -1,3 +1,5 @@
+package ru.spbau.mit;
+
 import java.util.*;
 
 /**
@@ -5,10 +7,10 @@ import java.util.*;
  * coordinates of top left corner of rooms, their width, height.
  */
 class Map {
+    List<Room> rooms = new ArrayList<>();
     private int width;
     private int height;
     private List<Integer> data = new ArrayList<>();
-    List<Room> rooms = new ArrayList<>();
 
 
     Map(int width, int height, int roomsNumber) {
@@ -24,6 +26,7 @@ class Map {
      * 0: this cell is external for map
      * 1: this cell is internal for map
      * 2: this cell is wall
+     *
      * @return data - width*height size array
      */
     public List<Integer> getData() {
@@ -32,6 +35,7 @@ class Map {
 
     /**
      * getter for width of map
+     *
      * @return width of map
      */
     public int getWidth() {
@@ -139,7 +143,9 @@ class Map {
     }
 
     private static class Point implements Comparable<Point> {
-        int x, y, cost;
+        int x;
+        int y;
+        int cost;
 
         Point(int x, int y, int cost) {
             this.x = x;
@@ -175,6 +181,7 @@ class Map {
 
         /**
          * Has this room intersect another room
+         *
          * @param r room we want to check intersection with
          * @return if intersects the method will return true else false
          */

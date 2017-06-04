@@ -1,19 +1,20 @@
+package ru.spbau.mit;
+
 /**
  * Base class for characters classes.
  */
 abstract class Character {
 
-    final String name;
+    private final String name;
     private final boolean isBot;
-    boolean isAlive;
     private final String display;
+    protected boolean isAlive;
     protected int power = 50;
     protected int safety = 50;
-    protected int health;
+    protected int health = 100;
 
-    public Character(String name, int health, boolean isBot, String display) {
+    public Character(String name, boolean isBot, String display) {
         this.name = name;
-        this.health = health;
         this.isBot = isBot;
         this.isAlive = true;
         this.display = display;
@@ -21,6 +22,7 @@ abstract class Character {
 
     /**
      * Is this character alive or dead.
+     *
      * @return true if character is alive
      */
     public boolean getIsAlive() {
@@ -29,6 +31,7 @@ abstract class Character {
 
     /**
      * To get name of the character.
+     *
      * @return name
      */
     public String getName() {
@@ -37,6 +40,7 @@ abstract class Character {
 
     /**
      * If character is Shovel or Dog the method returns true, if Mole returns false.
+     *
      * @return look above
      */
     public boolean isBot() {
@@ -45,6 +49,7 @@ abstract class Character {
 
     /**
      * What symbol corresponds to the character.
+     *
      * @return symbol
      */
     public String getDisplay() {
@@ -53,14 +58,17 @@ abstract class Character {
 
     /**
      * for logging
+     *
      * @return string representation of character: it's name, state.
      */
+    @Override
     public String toString() {
         return "Creature(Name:" + this.name + " Health:" + this.health + ")";
     }
 
     /**
      * The method for attack, it's called when attacker tries to go to the location when this object is located.
+     *
      * @param attacker character that tries to go to this' location
      * @return
      */
@@ -77,8 +85,33 @@ abstract class Character {
         }
     }
 
+    public Location attemptMove(Location location, Character.Movement movement) {
+        Location newLocation = new Location(location);
+        if (getIsAlive()) {
+            if (movement == null) movement = movement();
+            switch (movement) {
+                case UP:
+                    newLocation.y = location.y - 1;
+                    break;
+                case DOWN:
+                    newLocation.y = location.y + 1;
+                    break;
+                case LEFT:
+                    newLocation.x = location.x - 1;
+                    break;
+                case RIGHT:
+                    newLocation.x = location.x + 1;
+                    break;
+                case HOLD:
+                    break;
+            }
+        }
+        return newLocation;
+    }
+
     /**
      * by default returns random direction for the character
+     *
      * @return instance of Movement enum
      */
     public Movement movement() {

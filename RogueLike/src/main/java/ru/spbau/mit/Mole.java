@@ -1,14 +1,18 @@
+package ru.spbau.mit;
+
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  * There is only one instance of this class: main character
  */
 class Mole extends Character {
     public static final String moleSymbol = "@";
     Map<Cell.Item, Integer> backpack = new HashMap<>();
-    Cell.Item currItem = null;
-    Mole(String name, int health, boolean isBot) {
-        super(name, health, isBot, moleSymbol);
+    Cell.Item currItem = Cell.Item.NOTHING;
+
+    Mole(String name) {
+        super(name, false, moleSymbol);
         power = 50;
         safety = 50;
         for (Cell.Item item : Cell.Item.values()) {
@@ -18,6 +22,7 @@ class Mole extends Character {
 
     /**
      * gives increase to one of mole characteristics
+     *
      * @param item instance of Cell.Item enum
      */
     public void putItemToBackpack(Cell.Item item) {
@@ -28,9 +33,14 @@ class Mole extends Character {
      * user can choose item that he want to put on mole and
      * increase one of it's characteristics, but it cause decrease of
      * some another characteristic
+     *
      * @param item to put on
      */
     public void takeItemFromBackpack(Cell.Item item) {
+        if (item == Cell.Item.NOTHING) {
+            takeOffItem();
+            currItem = item;
+        }
         if (backpack.get(item) == 0) return;
         switch (item) {
             case HELMET:
@@ -51,7 +61,8 @@ class Mole extends Character {
             }
             currItem = item;
         }
-        backpack.put(item, backpack.get(item) - 1);
+        if (item != Cell.Item.NOTHING)
+            backpack.put(item, backpack.get(item) - 1);
     }
 
     /**
@@ -77,10 +88,10 @@ class Mole extends Character {
         this.health -= damageTaken;
 
         if (this.health <= 0) {
-            System.out.printf("(%s) took (%d) damage and died.\n", this.name, damageTaken);
+            System.out.printf("(%s) took (%d) damage and died.\n", getName(), damageTaken);
             this.isAlive = false;
         } else {
-            System.out.printf("(%s) took (%d) damage.\n", this.name, damageTaken);
+            System.out.printf("(%s) took (%d) damage.\n", getName(), damageTaken);
         }
 
         return damageTaken;

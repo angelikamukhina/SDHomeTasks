@@ -1,3 +1,5 @@
+package ru.spbau.mit;
+
 /**
  * class for aggregating coordinates of point inside map
  */
@@ -25,6 +27,7 @@ class Location {
 
     /**
      * We override method for search in occupied by characters and walls locations
+     *
      * @param o
      * @return true if both coordinates are equal
      */

@@ -1,3 +1,5 @@
+package ru.spbau.mit;
+
 /**
  * One of the enemies in the game, object of Dog class
  * moves toward mole. It search direction that give
@@ -7,15 +9,17 @@ class Dog extends Character {
     Location location = null;
     Cell moleCell = null;
 
-    public Dog(String name, int health, boolean isBot, String display, Cell moleCell, Location location) {
-        super(name, health, isBot, display);
+    public Dog(String name, boolean isBot, String display, Cell moleCell, Location location) {
+        super(name, isBot, display);
         this.moleCell = moleCell;
         this.location = location;
     }
 
+
     /**
      * get instance of Movement enum according to
      * minimum distance between mole and the dog
+     *
      * @return instance of Movement enum
      */
     @Override
@@ -50,8 +54,9 @@ class Dog extends Character {
     }
 
     private int dist(Location location) {
-        return (int) (Math.pow((double) (location.x - moleCell.getX()), 2) +
-                Math.pow((double) (location.y - moleCell.getY()), 2)) +
+        Location moleLocation = moleCell.getLocation();
+        return (int) (Math.pow((double) (location.x - moleLocation.x), 2) +
+                Math.pow((double) (location.y - moleLocation.y), 2)) +
                 (int) (Math.random() * 20 - 10);
     }
 }

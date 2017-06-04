@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+   <Appenders>
+      <File name="logFile" fileName="log.log">
+          <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+          <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+      </File>
+      <Console name="Console" target="SYSTEM_OUT">
+         <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+          <Filters>
+              <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL"/>
+             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+          </Filters>
+      </Console>
+   </Appenders>
+   <Loggers>
+      <Root level="all">
+          <AppenderRef ref="logFile" level="info"/>
+          <AppenderRef ref="Console" level="error"/>
+      </Root>
+   </Loggers>
+</Configuration>
