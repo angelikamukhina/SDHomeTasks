@@ -1,0 +1,89 @@
+package ru.spbau.mit;
+
+import java.util.*;
+
+/**
+ * Class stream for all commands.
+ * Command takes it's arguments from this stream and
+ * sets return value there
+ */
+class Stream {
+
+    /**
+     * use of Vector object helps support more than one argument for commands.
+     * for example, command "=" takes two arguments (variable and it's value)
+     */
+    private Vector<String> stream = new Stack<>();
+
+    /**
+     * The method to get size of the stream
+     *
+     * @return size of stream
+     */
+    public int size() {
+        return stream.size();
+    }
+
+    /**
+     * Doesn't overwrite existing stream, just add str as new element
+     *
+     * @param str element to add
+     */
+    public void addToStream(String str) {
+        stream.addElement(str);
+    }
+
+    /**
+     * to get result of commands executing
+     * @return result string
+     */
+    public String getResult() throws NoSuchElementException{
+        if (stream.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return stream.get(0);
+    }
+
+    /**
+     * concatenates corresponding element with str
+     *
+     * @param index index of stream vector
+     * @param str   string to concatenate with
+     */
+    public void addToStreamElement(int index, String str) {
+        if (stream.size() - 1 < index) {
+            int initialLastIndex = stream.size() - 1;
+            for (int i = initialLastIndex; i < index; i++) {
+                stream.add("");
+            }
+        }
+        stream.insertElementAt(stream.get(index) + str, index);
+        stream.remove(stream.size() - 1);
+    }
+
+    /**
+     * The method to get all strings in stream in list
+     *
+     * @return Vector<String> stream
+     */
+    public List<String> getStream() {
+        return stream;
+    }
+
+    /**
+     * Clears whole content of the stream and adds new string to it
+     *
+     * @param arg new string
+     */
+    public void setStream(String arg) {
+        stream = new Stack<>();
+        stream.add(arg);
+    }
+
+    /**
+     * clears stream
+     */
+    public void clearStream() {
+        stream = new Stack<>();
+    }
+}
