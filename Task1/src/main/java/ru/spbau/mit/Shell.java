@@ -30,7 +30,7 @@ public class Shell {
                 continue;
             }
 
-            System.out.println(stream.getStream().get(0));
+            System.out.println(stream.getResult());
             stream.clearStream();
         }
     }

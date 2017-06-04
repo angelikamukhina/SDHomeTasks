@@ -1,10 +1,12 @@
 package ru.spbau.mit;
 
+import org.apache.commons.cli.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.System.exit;
 
@@ -23,6 +25,7 @@ class Executable {
         possibleCmds.add("wc");
         possibleCmds.add("pwd");
         possibleCmds.add("exit");
+        possibleCmds.add("grep");
         possibleCmds.add("=");
     }
 
@@ -76,6 +79,11 @@ class Executable {
 
             case "pwd": {
                 execPwd(stream);
+                break;
+            }
+
+            case "grep": {
+                execGrep(stream, afterPipe);
                 break;
             }
 
@@ -155,6 +163,90 @@ class Executable {
 
     private void execPwd(Stream stream) {
         stream.setStream(new File("").getAbsolutePath());
+    }
+
+    private void execGrep(Stream stream, boolean afterPipe) {
+        CommandLine cmd = getCmd(stream);
+        String[] args = cmd.getArgs();
+        String regex;
+        if (!afterPipe) {
+            regex = args[0];
+        } else {
+            regex = args[args.length - 1];
+        }
+
+        if(cmd.hasOption("i")) {
+            regex = "(?i)" + regex;
+        }
+        if (cmd.hasOption("w")) {
+            regex = String.format("\\b%s\\b", regex);
+        }
+        int numberOfLines = 0;
+        if (cmd.hasOption("A")) {
+            numberOfLines = Integer.parseInt(cmd.getOptionValue("A"));
+        }
+        Pattern pattern = Pattern.compile("(" + regex + ")");
+
+        List<String> lines;
+        if (!afterPipe) {
+            // creates stream for executing cat
+            String fileName = args[1];
+            Stream catStream = new Stream();
+            catStream.addToStream(fileName);
+            execCat(catStream);
+            lines = Arrays.asList(catStream.getResult().split("\n"));
+        } else {
+            // stream.getResult() gives result of executing previous command
+            try {
+                lines = Arrays.asList(stream.getResult().split("\n"));
+            } catch (NoSuchElementException e) {
+                System.out.println("Wrong command format.");
+                return;
+            }
+        }
+        stream.clearStream();
+
+        int lineIndex = 0;
+        while (lineIndex < lines.size()) {
+            String currString = lines.get(lineIndex);
+            Matcher matcher = pattern.matcher(currString);
+            if (matcher.find()) {
+                if (stream.size() == 0) {
+                    stream.addToStream(currString);
+                } else {
+                    stream.addToStreamElement(0, "\n" + currString);
+                }
+                appendNLines(stream, lines, lineIndex + 1, numberOfLines);
+                lineIndex += numberOfLines;
+            }
+            lineIndex++;
+        }
+    }
+
+    private CommandLine getCmd(Stream stream) {
+        Options options = new Options();
+        options.addOption("i", false, "case insensibility");
+        options.addOption("w", false, "search only whole words");
+        options.addOption("A", true, "number of lines to append after match");
+        CommandLineParser parser = new DefaultParser();
+        String[] line = new String[0];
+        CommandLine cmd = null;
+        try {
+            cmd = parser.parse(options, stream.getStream().toArray(line));
+        } catch (ParseException e) {
+            System.out.println("Wrong command arguments");
+        }
+
+        if (cmd == null) {
+            System.out.println("Error while parsing");
+        }
+        return cmd;
+    }
+
+    private void appendNLines(Stream stream, List<String> lines, int initialIndex, int numberOfLines) {
+        for (int i = initialIndex; i < initialIndex + numberOfLines; i++) {
+            stream.addToStreamElement(0, "\n" + lines.get(i));
+        }
     }
 
     private void execAssign(Environment env, Stream stream) {

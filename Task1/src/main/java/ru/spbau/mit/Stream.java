@@ -1,7 +1,6 @@
 package ru.spbau.mit;
 
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Class stream for all commands.
@@ -14,7 +13,7 @@ class Stream {
      * use of Vector object helps support more than one argument for commands.
      * for example, command "=" takes two arguments (variable and it's value)
      */
-    private Vector<String> stream = new Vector<>();
+    private Vector<String> stream = new Stack<>();
 
     /**
      * The method to get size of the stream
@@ -35,12 +34,29 @@ class Stream {
     }
 
     /**
+     * to get result of commands executing
+     * @return result string
+     */
+    public String getResult() throws NoSuchElementException{
+        if (stream.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return stream.get(0);
+    }
+
+    /**
      * concatenates corresponding element with str
      *
      * @param index index of stream vector
      * @param str   string to concatenate with
      */
     public void addToStreamElement(int index, String str) {
+        if (stream.size() - 1 < index) {
+            int initialLastIndex = stream.size() - 1;
+            for (int i = initialLastIndex; i < index; i++) {
+                stream.add("");
+            }
+        }
         stream.insertElementAt(stream.get(index) + str, index);
         stream.remove(stream.size() - 1);
     }
@@ -60,7 +76,7 @@ class Stream {
      * @param arg new string
      */
     public void setStream(String arg) {
-        stream = new Vector<>();
+        stream = new Stack<>();
         stream.add(arg);
     }
 
@@ -68,6 +84,6 @@ class Stream {
      * clears stream
      */
     public void clearStream() {
-        stream = new Vector<>();
+        stream = new Stack<>();
     }
 }
