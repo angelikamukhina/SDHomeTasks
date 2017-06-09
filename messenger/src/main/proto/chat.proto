@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ru.spbau.mit";
+option java_outer_classname = "ChatOuter";
+
+service Chat {
+  rpc routeChat (stream Message) returns (stream  Message) {}
+}
+
+message Message {
+    string name = 1;
+    string time = 2;
+    string content = 3;
+}
