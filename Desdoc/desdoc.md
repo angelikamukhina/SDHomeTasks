@@ -50,7 +50,7 @@
 
 
 # Композиция:
-
+![Image alt](https://github.com/angelikamukhina/SDHomeTasks/raw/desdoc/Desdoc/ComponentDiagram.svg)
 
 # Логическая структура:
 
