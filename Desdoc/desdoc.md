@@ -42,13 +42,6 @@
 
 
 
-
-
-
-
-
-
-
 # Композиция:
 ![Component diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/ComponentDiagram.jpg)
 
@@ -56,7 +49,7 @@
 ![Class diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/ClassDiagram.jpg)
 
 # Взаимодействия и состояния:
-Диаграмма конечных автоматов:
+## Диаграмма конечных автоматов:
 ![DFA diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/DFADiagram.jpg)
-Диаграмма последовательности:
+## Диаграмма последовательности:
 ![Sequence diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/sequenceDiagram.jpg)
