@@ -53,8 +53,10 @@
 ![alt text](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/ComponentDiagram.svg)
 
 # Логическая структура:
-
+![alt text](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/ClassDiagram.svg)
 
 # Взаимодействия и состояния:
 Диаграмма конечных автоматов:
-
+![alt text](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/DFADiagram.svg)
+Диаграмма последовательности:
+![alt text](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/sequenceDiagram.svg)
