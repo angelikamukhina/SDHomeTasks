@@ -53,10 +53,10 @@
 ![Component diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/ComponentDiagram.jpg)
 
 # Логическая структура:
-![Class diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/ClassDiagram.svg)
+![Class diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/ClassDiagram.jpg)
 
 # Взаимодействия и состояния:
 Диаграмма конечных автоматов:
-![DFA diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/DFADiagram.svg)
+![DFA diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/DFADiagram.jpg)
 Диаграмма последовательности:
-![Sequence diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/sequenceDiagram.svg)
+![Sequence diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/sequenceDiagram.jpg)
