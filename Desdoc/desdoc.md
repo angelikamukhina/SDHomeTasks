@@ -50,13 +50,13 @@
 
 
 # Композиция:
-![alt text](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/ComponentDiagram.svg)
+![Component diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/ComponentDiagram.jpg)
 
 # Логическая структура:
-![alt text](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/ClassDiagram.svg)
+![Class diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/ClassDiagram.svg)
 
 # Взаимодействия и состояния:
 Диаграмма конечных автоматов:
-![alt text](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/DFADiagram.svg)
+![DFA diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/DFADiagram.svg)
 Диаграмма последовательности:
-![alt text](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/sequenceDiagram.svg)
+![Sequence diagram](https://github.com/angelikamukhina/SDHomeTasks/blob/desdoc/Desdoc/sequenceDiagram.svg)
