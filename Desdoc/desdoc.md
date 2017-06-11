@@ -50,7 +50,7 @@
 
 
 # Композиция:
-
+![alt text](ComponentDiagram.svg)
 
 # Логическая структура:
 
